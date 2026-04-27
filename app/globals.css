@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 241, 242; /* rose 50 */
+  --background-end-rgb: 255, 228, 230;   /* rose 100 */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Kita hapus media query (prefers-color-scheme: dark) bawaan Next.js 
+  agar web ini TETAP berwarna pink romantis meskipun HP si dia pakai Dark Mode.
+*/
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom right,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Menggunakan font bawaan yang bersih jika tidak menggunakan next/font */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =========================================
+   ANIMASI KUSTOM UNTUK HALAMAN CONFESSION
+   ========================================= */
+
+/* Animasi untuk hati yang melayang di background */
+@keyframes float {
+  0% {
+    transform: translateY(0vh) translateX(0px) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px) scale(1.2);
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Di Tailwind v4, kita mendefinisikan utility class langsung seperti ini */
+@utility animate-float {
+  animation: float linear infinite;
+  pointer-events: none; /* Agar tidak menghalangi klik pada tombol */
+}
+
+/* Animasi denyut halus untuk tombol YES */
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 4px 25px rgba(236, 72, 153, 0.6);
+  }
+}
+
+@utility animate-pulse-gentle {
+  animation: pulse-gentle 2s infinite;
 }
